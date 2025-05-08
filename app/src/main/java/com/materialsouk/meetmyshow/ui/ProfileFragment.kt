@@ -13,46 +13,89 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.materialsouk.meetmyshow.R
 import com.materialsouk.meetmyshow.databinding.FragmentProfileBinding
-import java.util.*
+import timber.log.Timber
 
 class ProfileFragment : Fragment() {
     private var _binding: FragmentProfileBinding? = null
-
     private val binding get() = _binding!!
     private lateinit var loadingDialog: Dialog
+    private val firestore = FirebaseFirestore.getInstance()
+    private val auth = FirebaseAuth.getInstance()
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
-        val root: View = binding.root
-        loadingDialog = Dialog(binding.root.context)
-        loadingDialog.setContentView(R.layout.loading_layout)
-        loadingDialog.window!!.setLayout(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        )
-        loadingDialog.setCancelable(false)
-        FirebaseFirestore.getInstance().collection("Users").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+        setupLoadingDialog()
+        loadUserData()
+        return binding.root
+    }
+
+    private fun setupLoadingDialog() {
+        loadingDialog = Dialog(requireContext()).apply {
+            setContentView(R.layout.loading_layout)
+            window?.setLayout(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
+            setCancelable(false)
+            window?.setBackgroundDrawableResource(android.R.color.transparent)
+        }
+        loadingDialog.show()
+    }
+
+    private fun loadUserData() {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            handleUserNotLoggedIn()
+            return
+        }
+
+        firestore.collection("Users")
+            .document(currentUser.uid)
+            .get()
             .addOnSuccessListener { document ->
-                if (document != null) {
-                    binding.edUserName.setText(document.data!!["username"]!!.toString())
-                    binding.edEmailId.setText(document.data!!["email_id"]!!.toString())
-                    binding.edPhoneNum.setText(document.data!!["phone_no"]!!.toString())
-                }else{
-                    (binding.root.context as Activity).finish()
+                loadingDialog.dismiss()
+
+                if (!document.exists()) {
+                    Timber.e("User document not found in Firestore")
+                    showToast("User data not found")
+                    return@addOnSuccessListener
+                }
+
+                try {
+                    val userData = document.data ?: throw Exception("Empty user data")
+
+                    binding.apply {
+                        edUserName.setText(userData["username"]?.toString().orEmpty())
+                        edEmailId.setText(userData["email_id"]?.toString().orEmpty())
+                        edPhoneNum.setText(userData["phone_no"]?.toString().orEmpty())
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e, "Error parsing user data")
+                    showToast("Error loading profile")
                 }
             }
             .addOnFailureListener { exception ->
                 loadingDialog.dismiss()
-                Toast.makeText(
-                    binding.root.context,
-                    Objects.requireNonNull(exception).toString(),
-                    Toast.LENGTH_SHORT
-                ).show()
+                Timber.e(exception, "Failed to load user data")
+                showToast("Failed to load profile: ${exception.localizedMessage}")
             }
-        return root
     }
+
+    private fun handleUserNotLoggedIn() {
+        loadingDialog.dismiss()
+        Timber.w("No authenticated user found")
+        showToast("Please login first")
+        (activity as? Activity)?.finish()
+    }
+
+    private fun showToast(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

@@ -20,47 +20,74 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.materialsouk.meetmyshow.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
+
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private val auth by lazy { FirebaseAuth.getInstance() }
+    private val firestore by lazy { FirebaseFirestore.getInstance() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setupNavigation()
+        loadUserData()
+    }
 
+    private fun setupNavigation() {
         setSupportActionBar(binding.appBarSecond.toolbar)
-//        binding.appBarSecond.toolbar.title = "View Movies"
 
+        val navController = findNavController(R.id.nav_host_fragment_content_second)
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
-        val navController = findNavController(R.id.nav_host_fragment_content_second)
+
         appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_profile
-            ), drawerLayout
+            setOf(R.id.nav_home, R.id.nav_gallery, R.id.nav_profile),
+            drawerLayout
         )
-        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
-            FirebaseAuth.getInstance().signOut()
-            startActivity(Intent(this, LoginActivity::class.java))
-            finish()
-            true
-        }
-        val headerView: View = navView.getHeaderView(0)
-        FirebaseFirestore.getInstance().collection("Users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    headerView.findViewById<TextView>(R.id.txtUserName).text = task.result["username"].toString()
-                    headerView.findViewById<TextView>(R.id.txtEmail).text = task.result["email_id"].toString()
-                } else {
-                    val error: String = task.exception!!.message.toString()
-                    Toast.makeText(this@MainActivity, error, Toast.LENGTH_LONG).show()
-                }
-            }
+
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        navView.menu.findItem(R.id.nav_logout).setOnMenuItemClickListener {
+            auth.signOut()
+            navigateToLogin()
+            true
+        }
+    }
+
+    private fun loadUserData() {
+        auth.currentUser?.uid?.let { userId ->
+            firestore.collection("Users").document(userId)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        updateNavHeader(task.result)
+                    } else {
+                        showError(task.exception?.message)
+                    }
+                }
+        } ?: showError("User not authenticated")
+    }
+
+    private fun updateNavHeader(document: com.google.firebase.firestore.DocumentSnapshot?) {
+        val headerView: View = binding.navView.getHeaderView(0)
+        document?.let {
+            headerView.findViewById<TextView>(R.id.txtUserName).text = it["username"]?.toString() ?: ""
+            headerView.findViewById<TextView>(R.id.txtEmail).text = it["email_id"]?.toString() ?: ""
+        }
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        })
+        finish()
+    }
+
+    private fun showError(message: String?) {
+        Toast.makeText(this, message ?: "An error occurred", Toast.LENGTH_LONG).show()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -71,9 +98,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.cityMenu -> {
-                startActivity(
-                    Intent(this, LocationActivity::class.java)
-                )
+                startActivity(Intent(this, LocationActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)

@@ -17,31 +17,42 @@ class CinemaActivity : AppCompatActivity() {
         setSupportActionBar(binding.toolbar)
 
         val cinemaList: ArrayList<CinemaModel> = arrayListOf(
-            CinemaModel(
-                "Milano Multiplex",
-                "Bardoli",
-                "https://content.jdmagicbox.com/comp/surat/z3/0261px261.x261.110916120607.z2z3/catalogue/milano-multiplex-bardoli-surat-cinema-halls-2cjb8wj.jpg?clr=29333d"
-            ),
-            CinemaModel(
-                "Inox",
-                "Surat",
-                "https://img.dtnext.in/Articles/2021/Oct/202110221444244936_Inox-Leisure-Q2-loss-widens-to-Rs-88-cr_SECVPF.gif"
-            ),
-            CinemaModel(
-                "Rajhans Cinemas",
-                "Kamrej",
-                "https://content3.jdmagicbox.com/comp/surat/v9/0261px261.x261.180627193418.e3v9/catalogue/rajhans-cinemas-kamrej-surat-rvm3cwgrdp.jpg?clr=660000"
-            ),
-            CinemaModel(
-                "Nilkanth Multiplex Cinema",
-                "Surat",
-                "https://content3.jdmagicbox.com/comp/def_content/cinema_halls/default-cinema-halls-8.jpg?clr=2d2046"
-            ),
-            CinemaModel(
-                "Laxmi Cine Magic",
-                "Navsari",
-                "https://content3.jdmagicbox.com/comp/navsari/55/9999pmulmumstd3955/catalogue/laxmi-cine-magic-fadvel-navsari-multiplex-cinema-halls-2pt7t8c.png"
-            ),
+            // CGV
+            CinemaModel("CGV Crescent Mall", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Center Landmark 81", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Aeon Mall Bình Tân", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Aeon Mall Long Biên", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Bà Triệu", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Nguyễn Chí Thanh", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Đà Nẵng", "Đà Nẵng", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Trà Vinh", "Trà Vinh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Rạch Giá", "Kiên Giang", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Vĩnh Long", "Vĩnh Long", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Aeon Mall Tân Phú", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV GigaMall", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Parkson Hùng Vương", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Metropolis", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Hồ Gươm Plaza", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+            CinemaModel("CGV Vincom Ocean Park", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/cgv.png"),
+
+            // Lotte
+            CinemaModel("Lotte Cinema Cantavil", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/lotte.jpg"),
+            CinemaModel("Lotte Cinema Gò Vấp", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/lotte.jpg"),
+            CinemaModel("Lotte Cinema Cần Thơ", "Cần Thơ", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/lotte.jpg"),
+            CinemaModel("Lotte Cinema Nha Trang", "Khánh Hòa", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/lotte.jpg"),
+            CinemaModel("Lotte Cinema Hà Đông", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/lotte.jpg"),
+            CinemaModel("Lotte Cinema Nam Sài Gòn", "TP. Hồ Chí Minh", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/lotte.jpg"),
+
+            // Beta
+            CinemaModel("Beta Mỹ Đình", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Thanh Xuân", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Long Biên", "Hà Nội", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Biên Hòa", "Đồng Nai", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Thái Nguyên", "Thái Nguyên", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Bắc Giang", "Bắc Giang", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Thanh Hóa", "Thanh Hóa", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Nha Trang", "Khánh Hòa", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg"),
+            CinemaModel("Beta Huế", "Thừa Thiên Huế", "https://pub-cd617de5e74b498ab4b882710c47f9b0.r2.dev/beta.jpg")
         )
 
         // Lấy dữ liệu từ Intent

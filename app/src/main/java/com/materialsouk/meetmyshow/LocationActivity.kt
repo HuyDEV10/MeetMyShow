@@ -26,23 +26,19 @@ class LocationActivity : AppCompatActivity() {
             MODE_PRIVATE
         )
         courseList = arrayListOf(
-            CitiesModel("Ahmedabad"),
-            CitiesModel("Bardoli"),
-            CitiesModel("Bhavnagar"),
-            CitiesModel("Bhuj"),
-            CitiesModel("Kamrej"),
-            CitiesModel("Navsari"),
-            CitiesModel("Nagpur"),
-            CitiesModel("Pune"),
-            CitiesModel("Purna"),
-            CitiesModel("Rajkot"),
-            CitiesModel("Surapura"),
-            CitiesModel("Surat"),
-            CitiesModel("Vadodara"),
-            CitiesModel("Valsad"),
-            CitiesModel("Vapi"),
-            CitiesModel("Vijayapura"),
-            CitiesModel("Vijaypur"),
+            CitiesModel("TP. Hồ Chí Minh"),
+            CitiesModel("Hà Nội"),
+            CitiesModel("Đà Nẵng"),
+            CitiesModel("Trà Vinh"),
+            CitiesModel("Kiên Giang"),
+            CitiesModel("Vĩnh Long"),
+            CitiesModel("Cần Thơ"),
+            CitiesModel("Khánh Hòa"),
+            CitiesModel("Đồng Nai"),
+            CitiesModel("Thái Nguyên"),
+            CitiesModel("Bắc Giang"),
+            CitiesModel("Thanh Hóa"),
+            CitiesModel("Thừa Thiên Huế")
 
             )
         val locationStr = sharedPreferences.getString("location_str", null)

@@ -10,6 +10,7 @@ buildscript {
         classpath 'com.android.tools.build:gradle:8.8.0' // Phiên bản AGP ổn định mới nhất
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.4.1' // Phiên bản mới nhất của Google Services plugin
+        classpath 'com.google.gms:google-services:4.4.0'
     }
 }
 
